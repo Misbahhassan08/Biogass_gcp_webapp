@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Card, Container, Row, Col, Button, Table } from "react-bootstrap";
-
 import TableRows from "./modules/TableRows";
 import CSVRows from "./modules/csvRows";
 
 function BuildReportGrid() {
   const get_csv_list_endpoint =
-    "https://a7ce-182-178-148-176.ngrok-free.app/api/get_list_of_csv";
+    "https://biomass-gcp-server-rnt37kunua-uc.a.run.app/api/get_list_of_csv";
   const post_metaData_endpoint =
-    "https://a7ce-182-178-148-176.ngrok-free.app/api/get_meta_data";
+    "https://biomass-gcp-server-rnt37kunua-uc.a.run.app/api/get_meta_data";
   const [rowsData, setRowsData] = useState([]);
   const [csvRowsData, setCsvRowsData] = useState();
 
@@ -16,13 +15,12 @@ function BuildReportGrid() {
   function checkData() {
     fetch(post_metaData_endpoint, {
       method: "POST",
-      mode: 'no-cors',
       body: JSON.stringify({
         filedire: ".2023",
         userId: Math.random().toString(36).slice(2),
       }),
       headers: {
-        "Content-type": "application/json", 'Access-Control-Allow-Origin':'*'
+        "Content-type": "application/json",
       },
     })
       .then((res) => res.json())

@@ -7,7 +7,7 @@ import NormalizedGraphData from "./modules/normalizedGraph/normalizedGraphs";
 
 function BuildReportGraph() {
   const get_graph_data =
-    "https://a7ce-182-178-148-176.ngrok-free.app/api/get_graph_meta_data";
+    "https://biomass-gcp-server-rnt37kunua-uc.a.run.app/api/get_graph_meta_data";
 
   const [sensor, setSensor] = useState([]);
   const [dataType, setDataType] = useState();
@@ -75,10 +75,9 @@ function BuildReportGraph() {
   function requestDataApi(reqObj) {
     fetch(get_graph_data, {
       method: "POST",
-      mode: 'no-cors',
       body: JSON.stringify(reqObj),
       headers: {
-        "Content-type": "application/json",'Access-Control-Allow-Origin':'*'
+        "Content-type": "application/json",
       },
     })
       .then((res) => res.json())

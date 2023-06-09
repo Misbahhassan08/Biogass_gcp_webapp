@@ -37,6 +37,13 @@ const SidebarData = [
     icon: Media.Images.sixthicon,
     cName: "nav-text",
   },
+  {
+    //test101
+    title: "Test101",
+    path: "/test101",
+    icon: Media.Images.sixthicon,
+    cName: "nav-text",
+  },
 
   {
     title: "Build Report",
