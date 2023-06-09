@@ -47,8 +47,6 @@ import Systemstats from "./components/pages/maintenance/systemstats";
 import Qc from "./components/pages/maintenance/qc";
 import Systemstatsone from "./components/pages/maintenance/systemstatsone";
 
-import Test101 from "./components/pages/test101/test101";
-
 import BuildReport from "./components/pages/build-report";
 import BuildReportGraph from "./components/pages/build-report/graph/reports";
 import BuildReportGrid from "./components/pages/build-report/grid/reports";
@@ -240,12 +238,6 @@ function App() {
               <Route
                 path={`${process.env.PUBLIC_URL}/support`}
                 element={<Support />}
-              />
-
-              {/* test101 */}
-              <Route
-                path={`${process.env.PUBLIC_URL}/test101`}
-                element={<Test101 />}
               />
 
               <Route
