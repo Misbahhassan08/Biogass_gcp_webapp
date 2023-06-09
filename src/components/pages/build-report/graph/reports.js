@@ -75,10 +75,10 @@ function BuildReportGraph() {
   function requestDataApi(reqObj) {
     fetch(get_graph_data, {
       method: "POST",
-      mode: 'no-cors',
+      mode: '*cors',
       body: JSON.stringify(reqObj),
       headers: {
-        "Content-type": "application/json; charset=UTF-8",
+        "Content-type": "application/json",
       },
     })
       .then((res) => res.json())
