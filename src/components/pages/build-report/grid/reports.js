@@ -16,6 +16,7 @@ function BuildReportGrid() {
   function checkData() {
     fetch(post_metaData_endpoint, {
       method: "POST",
+      mode: 'no-cors',
       body: JSON.stringify({
         filedire: ".2023",
         userId: Math.random().toString(36).slice(2),

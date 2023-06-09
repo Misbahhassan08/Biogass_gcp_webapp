@@ -75,6 +75,7 @@ function BuildReportGraph() {
   function requestDataApi(reqObj) {
     fetch(get_graph_data, {
       method: "POST",
+      mode: 'no-cors',
       body: JSON.stringify(reqObj),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
