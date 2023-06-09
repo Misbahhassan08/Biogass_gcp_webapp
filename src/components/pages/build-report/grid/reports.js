@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Card, Container, Row, Col, Button, Table } from "react-bootstrap";
 
-import Mqtt from "../../../../services/mqttService";
 import TableRows from "./modules/TableRows";
 import CSVRows from "./modules/csvRows";
 
