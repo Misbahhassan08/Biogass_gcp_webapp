@@ -16,13 +16,13 @@ function BuildReportGrid() {
   function checkData() {
     fetch(post_metaData_endpoint, {
       method: "POST",
-      mode: '*cors',
+      mode: 'no-cors',
       body: JSON.stringify({
         filedire: ".2023",
         userId: Math.random().toString(36).slice(2),
       }),
       headers: {
-        "Content-type": "application/json",
+        "Content-type": "application/json", 'Access-Control-Allow-Origin':'*'
       },
     })
       .then((res) => res.json())
