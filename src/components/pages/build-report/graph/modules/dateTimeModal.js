@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import dayjs from "dayjs";
 
-
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { MobileDateTimePicker } from "@mui/x-date-pickers";
+import { MobileTimePicker } from "@mui/x-date-pickers";
 
 export default function DateTimeModal(props) {
   const [value, setValue] = useState("");
@@ -40,11 +39,11 @@ export default function DateTimeModal(props) {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <MobileDateTimePicker
+      <MobileTimePicker
         className="date-time-modal"
         disabled={props.disabled}
         ampm={false}
-        format="YYYY-MM-DD HH:mm:ss"
+        format="HH:mm:ss"
         sx={{
           backgroundColor: props.disabled ? "#808080" : "white",
           color: "#000",

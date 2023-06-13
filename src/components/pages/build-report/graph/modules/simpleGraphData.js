@@ -1,10 +1,21 @@
 import { useState, useEffect } from "react";
+import React from "react";
 import dayjs from "dayjs";
 import { ResponsiveLine } from "@nivo/line";
+import { Container,Row, Col, Button } from "react-bootstrap";
+import { CSVLink } from "react-csv";
 
 function SimpleGraphData(props) {
+  const [headers, setheaders] = useState([{ label: "TimeStamp", key: "timestamp" },
+  { label: "Vio", key: "vio" },
+  { label: "Blue", key: "blu" },
+  { label: "Green", key: "grn" },
+  { label: "Yellow", key: "yel" },
+  { label: "Orange", key: "org" },
+  { label: "Red", key: "red" },]);
   const [finalData, setFinalData] = useState([]);
   const [sensorNum, setSensorNum] = useState("");
+  const [rowData, setrowData] = useState([]);
 
   const isDashboard = false;
   let dataType;
@@ -15,6 +26,8 @@ function SimpleGraphData(props) {
   const YelPoint = [props.dataType + "_Avg_Yel_570nm"];
   const OrgPoint = [props.dataType + "_Avg_Org_600nm"];
   const RedPoint = [props.dataType + "_Avg_Red_650nm"];
+
+  
   const colorsNivo = {
     Vio: "violet",
     Blu: "blue",
@@ -28,7 +41,7 @@ function SimpleGraphData(props) {
     dataType = "Calibrated";
   } else if (props.dataType === "Raw") {
     dataType = "Raw";
-  } else if (props.dataType ==="Nrm") {
+  } else if (props.dataType === "Nrm") {
     dataType = "Normalized";
   }
 
@@ -38,13 +51,15 @@ function SimpleGraphData(props) {
     const parsedData = JSON.parse(data);
     setSensorNum(parsedData);
     //debugger;
-    console.log(props.index, "this is the index");
+    //console.log(parsedData[0], "this is parsed data");
+    //console.log(props.index, "this is the index");
+    //console.log(props, "these are the props");
     // debugger;
     const sampleLength = parsedData[props.index].Samples;
     setSensorNum(parsedData[props.index].Data_Point);
 
     let filteredData = [];
-
+    
     const maindata = [
       {
         id: "Vio",
@@ -71,26 +86,39 @@ function SimpleGraphData(props) {
         data: [],
       },
     ];
-
+    
+    
     for (let i = 0; i < sampleLength.length; i++) {
-      const dataDateTime = dayjs(parsedData[props.index].Samples[i].Time_Stamp);
-      if (
-        dataDateTime >= props.xMinValue[props.index] &&
-        dataDateTime <= props.xMaxValue[props.index]
-      ) {
+     
+      const time = parsedData[props.index].Samples[i].Time_Stamp.split(" ")[1];
+      const dataDateTime = dayjs(time, "HH:mm:ss");
+      // console.log(dataDateTime, "this is the time");
+      // debugger;
+      if (dataDateTime >= props.xMinValue && dataDateTime <= props.xMaxValue) {
+        let row = {
+          timestamp : time.toString(),
+          vio :parsedData[props.index].Samples[i]?.[VioPoint],
+          blu :parsedData[props.index].Samples[i]?.[BluPoint],
+          grn :parsedData[props.index].Samples[i]?.[GrnPoint] ,
+          yel :parsedData[props.index].Samples[i]?.[YelPoint] ,
+          org :parsedData[props.index].Samples[i]?.[OrgPoint] ,
+          red :parsedData[props.index].Samples[i]?.[RedPoint] 
+        }
+      
         const text = [
           {
             data: [
               {
-                x: parsedData[props.index].Samples[i].Time_Stamp,
+                x: parsedData[props.index].Samples[i].Time_Stamp.split(" ")[1],
                 y: parsedData[props.index].Samples[i]?.[VioPoint],
+                
               },
             ],
           },
           {
             data: [
               {
-                x: parsedData[props.index].Samples[i].Time_Stamp,
+                x: parsedData[props.index].Samples[i].Time_Stamp.split(" ")[1],
                 y: parsedData[props.index].Samples[i]?.[BluPoint],
               },
             ],
@@ -98,7 +126,7 @@ function SimpleGraphData(props) {
           {
             data: [
               {
-                x: parsedData[props.index].Samples[i].Time_Stamp,
+                x: parsedData[props.index].Samples[i].Time_Stamp.split(" ")[1],
                 y: parsedData[props.index].Samples[i]?.[GrnPoint],
               },
             ],
@@ -106,7 +134,7 @@ function SimpleGraphData(props) {
           {
             data: [
               {
-                x: parsedData[props.index].Samples[i].Time_Stamp,
+                x: parsedData[props.index].Samples[i].Time_Stamp.split(" ")[1],
                 y: parsedData[props.index].Samples[i]?.[YelPoint],
               },
             ],
@@ -114,7 +142,7 @@ function SimpleGraphData(props) {
           {
             data: [
               {
-                x: parsedData[props.index].Samples[i].Time_Stamp,
+                x: parsedData[props.index].Samples[i].Time_Stamp.split(" ")[1],
                 y: parsedData[props.index].Samples[i]?.[OrgPoint],
               },
             ],
@@ -122,20 +150,21 @@ function SimpleGraphData(props) {
           {
             data: [
               {
-                x: parsedData[props.index].Samples[i].Time_Stamp,
+                x: parsedData[props.index].Samples[i].Time_Stamp.split(" ")[1],
                 y: parsedData[props.index].Samples[i]?.[RedPoint],
               },
             ],
           },
         ];
 
+        setrowData(current => [...current, row])
         for (let i = 0; i <= 5; i++) {
           maindata[i]?.data.push(text[i]?.data[0]);
           filteredData = maindata.filter(
             (item) =>
-            // console.log(item.data[i]?.y, "this is the item"),
-              item.data[i]?.y >= props.yMinValue[props.index] &&
-              item.data[i]?.y <= props.yMaxValue[props.index]
+              // console.log(item.data[i]?.y, "this is the item"),
+              item.data[i]?.y >= props.yMinValue &&
+              item.data[i]?.y <= props.yMaxValue
           );
           // console.log(filteredData, "this is filtered data");
         }
@@ -147,20 +176,24 @@ function SimpleGraphData(props) {
       }
     }
 
-    console.log(filteredData, "this is the filtered data");
-
     setFinalData(filteredData);
   }
 
   useEffect(() => {
     showGraphData();
   }, []);
-
+  const csvReport = {
+    data: rowData,
+    headers: headers,
+    filename: dataType+'data_P'+sensorNum+'.csv'
+  };
   return (
-    <div style={{ height: "60vh" }}>
+    <Container style={{ height: "60vh" }}>
       <h3 style={{ marginTop: 90, textAlign: "center" }}>
         {dataType} data : P{sensorNum} Graph
       </h3>
+      
+      <Button><CSVLink {...csvReport}>Export Data to CSV</CSVLink></Button>
       <ResponsiveLine
         // {...console.log(finalData, "this is final data")}
         data={finalData}
@@ -265,7 +298,8 @@ function SimpleGraphData(props) {
           },
         ]}
       />
-    </div>
+
+      </Container>
   );
 }
 

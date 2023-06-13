@@ -1,12 +1,22 @@
 import { useState, useEffect } from "react";
 import { ResponsiveLine } from "@nivo/line";
 import dayjs from "dayjs";
+import { CSVLink } from "react-csv";
+import { Button } from "react-bootstrap";
 
 function SensorGraphData(props) {
   const [finalData, setFinalData] = useState([]);
   const [sensorNum, setSensorNum] = useState("");
   const [isDataValid, setIsDataValid] = useState(false);
-
+  const [headers, setheaders] = useState([
+  { label: "TimeStamp", key: "timestamp" },
+  { label: "_Avg_Vio_450nm", key: "vio" },
+  { label: "_Avg_Blu_500nm", key: "blu" },
+  { label: "_Avg_Grn_550nm", key: "grn" },
+  { label: "_Avg_Yel_570nm", key: "yel" },
+  { label: "_Avg_Org_600nm", key: "org" },
+  { label: "_Avg_Red_650nm", key: "red" },]);
+  const [rowData, setrowData] = useState([]);
   const isDashboard = false;
   let graphs;
 
@@ -80,19 +90,28 @@ function SensorGraphData(props) {
     ];
 
     for (let i = 0; i < sampleLength.length; i++) {
-      const dataDateTime = dayjs(parsedData[props.index].Samples[i].Time_Stamp);
-
+      const time= parsedData[props.index].Samples[i].Time_Stamp.split(" ")[1]
+      const dataDateTime = dayjs(time, "HH:mm:ss");
+      let row = {
+        timestamp : time.toString(),
+        vio :parsedData[props.index].Samples[i]?.[VioPoint],
+        blu :parsedData[props.index].Samples[i]?.[BluPoint],
+        grn :parsedData[props.index].Samples[i]?.[GrnPoint] ,
+        yel :parsedData[props.index].Samples[i]?.[YelPoint] ,
+        org :parsedData[props.index].Samples[i]?.[OrgPoint] ,
+        red :parsedData[props.index].Samples[i]?.[RedPoint] 
+      }
       // console.log(props.yMinValue[props.index], "this is y min value");
 
       if (
-        dataDateTime >= props.xMinValue[props.index] &&
-        dataDateTime <= props.xMaxValue[props.index]
+        dataDateTime >= props.xMinValue &&
+        dataDateTime <= props.xMaxValue
       ) {
         const text = [
           {
             data: [
               {
-                x: parsedData[props.index].Samples[i].Time_Stamp,
+                x: parsedData[props.index].Samples[i].Time_Stamp.split(" ")[1],
                 y: parsedData[props.index].Samples[i]?.[VioPoint],
               },
             ],
@@ -100,7 +119,7 @@ function SensorGraphData(props) {
           {
             data: [
               {
-                x: parsedData[props.index].Samples[i].Time_Stamp,
+                x: parsedData[props.index].Samples[i].Time_Stamp.split(" ")[1],
                 y: parsedData[props.index].Samples[i]?.[BluPoint],
               },
             ],
@@ -108,7 +127,7 @@ function SensorGraphData(props) {
           {
             data: [
               {
-                x: parsedData[props.index].Samples[i].Time_Stamp,
+                x: parsedData[props.index].Samples[i].Time_Stamp.split(" ")[1],
                 y: parsedData[props.index].Samples[i]?.[GrnPoint],
               },
             ],
@@ -116,7 +135,7 @@ function SensorGraphData(props) {
           {
             data: [
               {
-                x: parsedData[props.index].Samples[i].Time_Stamp,
+                x: parsedData[props.index].Samples[i].Time_Stamp.split(" ")[1],
                 y: parsedData[props.index].Samples[i]?.[YelPoint],
               },
             ],
@@ -124,7 +143,7 @@ function SensorGraphData(props) {
           {
             data: [
               {
-                x: parsedData[props.index].Samples[i].Time_Stamp,
+                x: parsedData[props.index].Samples[i].Time_Stamp.split(" ")[1],
                 y: parsedData[props.index].Samples[i]?.[OrgPoint],
               },
             ],
@@ -132,20 +151,20 @@ function SensorGraphData(props) {
           {
             data: [
               {
-                x: parsedData[props.index].Samples[i].Time_Stamp,
+                x: parsedData[props.index].Samples[i].Time_Stamp.split(" ")[1],
                 y: parsedData[props.index].Samples[i]?.[RedPoint],
               },
             ],
           },
         ];
-
+        setrowData(current => [...current, row])
         for (let i = 0; i <= 5; i++) {
           maindata[i]?.data.push(text[i]?.data[0]);
           filteredData = maindata.filter(
             (item) =>
               // console.log(item.data[i]?.y, "this is the item"),
-              item.data[i]?.y >= props.yMinValue[props.index] &&
-              item.data[i]?.y <= props.yMaxValue[props.index]
+              item.data[i]?.y >= props.yMinValue &&
+              item.data[i]?.y <= props.yMaxValue
           );
         }
 
@@ -163,12 +182,17 @@ function SensorGraphData(props) {
   useEffect(() => {
     showGraphData();
   }, []);
-
+  const csvReport = {
+    data: rowData,
+    headers: headers,
+    filename: graphs+'data_Normalize_P'+sensorNum+'.csv'
+  };
   return (
     <div style={{ height: "60vh" }}>
       <h3 style={{ marginTop: 90, textAlign: "center" }}>
         {graphs} data : Normalized P{sensorNum}
       </h3>
+      <Button><CSVLink {...csvReport}>Export Data to CSV</CSVLink></Button>
         <ResponsiveLine
           data={finalData}
           theme={{

@@ -31,6 +31,7 @@
     "react-bootstrap-sweetalert": "^5.2.0",
     "react-calendar": "^4.2.1",
     "react-chartjs-2": "^5.2.0",
+    "react-csv": "^2.2.2",
     "react-dom": "^18.2.0",
     "react-icons": "^4.9.0",
     "react-router-dom": "^6.11.2",

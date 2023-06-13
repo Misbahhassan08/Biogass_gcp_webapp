@@ -23,15 +23,16 @@ function DataTypeSelect(props) {
         label="demo-select-small-label"
         id="demo-select"
       >
-        <InputLabel id="demo-select-small-label">dataType</InputLabel>
+        <InputLabel className="dataTypeInput" id="demo-select-small-label">dataType</InputLabel>
         <Select
+        className= "dataTypeSelect"
           labelId="demo-select-small-label"
           id="demo-select-small"
           value={dataType}
           label="DataType"
           onChange={handleChange}
           sx={{
-            width: "100%",
+            width: "100%", 
           }}
         >
           <MenuItem value={"Raw"}>Raw Data</MenuItem>

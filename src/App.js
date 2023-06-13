@@ -47,11 +47,15 @@ import Systemstats from "./components/pages/maintenance/systemstats";
 import Qc from "./components/pages/maintenance/qc";
 import Systemstatsone from "./components/pages/maintenance/systemstatsone";
 
-
+//import Test101 from "./components/pages/test101/test101";
 
 import BuildReport from "./components/pages/build-report";
 import BuildReportGraph from "./components/pages/build-report/graph/reports";
 import BuildReportGrid from "./components/pages/build-report/grid/reports";
+
+import SampleDetails from "./components/pages/report-details";
+import SampleConcentrationDetails from "./components/pages/report-details/startDetails/sampleConcentrationDetails";
+import EndResultDetails from "./components/pages/report-details/endResults/endResult";
 
 function App() {
 
@@ -255,6 +259,20 @@ function App() {
               <Route
                 path={`${process.env.PUBLIC_URL}/build-report/graph`}
                 element={<BuildReportGraph />}
+              />
+
+              <Route
+                path={`${process.env.PUBLIC_URL}/sample-details`}
+                element={<SampleDetails />}
+              />
+
+              <Route
+                path={`${process.env.PUBLIC_URL}/sample-report/concentration-details`}
+                element={<SampleConcentrationDetails />}
+              />
+              <Route
+                path={`${process.env.PUBLIC_URL}/sample-report/end-results`}
+                element={<EndResultDetails />}
               />
 
               <Route path="*" element={<NoMatch />} />

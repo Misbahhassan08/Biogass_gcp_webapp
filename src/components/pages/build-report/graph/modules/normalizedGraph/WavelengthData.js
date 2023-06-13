@@ -1,10 +1,15 @@
 import { useState, useEffect } from "react";
 import { ResponsiveLine } from "@nivo/line";
 import dayjs from "dayjs";
+import { CSVLink } from "react-csv";
+import { Button } from "react-bootstrap";
 
 function WaveLengthGraphData(props) {
   const [finalData, setFinalData] = useState([]);
-
+  const [headers, setheaders] = useState([
+    { label: "TimeStamp", key: "timestamp" },
+    { label: "Color", key: "vio" }]);
+  const [rowData, setrowData] = useState([]);
   const isDashboard = false;
   let wave;
 
@@ -50,27 +55,33 @@ function WaveLengthGraphData(props) {
         id: props.dataType +  "_P" + samples[i].Sample_Num,
         data: [],
       };
-
+      
       for (let j = 0; j < samples.length; j++) {
-        const dataDateTime = dayjs(parsedData[i].Samples[j].Time_Stamp);
+        // const dataDateTime = dayjs(parsedData[i].Samples[j].Time_Stamp);
+        const time= parsedData[i].Samples[j].Time_Stamp.split(" ")[1]
+        const dataDateTime = dayjs(time, "HH:mm:ss");
 
         // console.log(props.xMinValue[i], "these are the min Value");
         // console.log(props.xMaxValue[i], "these are the max Value");
         // console.log(dataDateTime, "this is data datetime");
-
+        
         if (
-          dataDateTime >= props.xMinValue[i] &&
-          dataDateTime <= props.xMaxValue[i]
+          dataDateTime >= props.xMinValue &&
+          dataDateTime <= props.xMaxValue
         ) {
 
-          const time = samples[j].Time_Stamp;
+          const time = samples[j].Time_Stamp.split(" ")[1];
           const value = samples[j][props.dataType + "_Avg_" + wave];
-
+          let row = {
+            timestamp : time.toString(),
+            vio : value
+          }
           const dataPoint = {
             x: time,
             y: value,
           };
 
+          setrowData(current => [...current, row])
           graphData.data.push(dataPoint);
         }
       }
@@ -83,8 +94,8 @@ function WaveLengthGraphData(props) {
           filteredData = _result.filter(
             (item) =>
               // console.log(item.data[k]?.y, "this is data at" ,k)
-              item.data[k]?.y >= props.yMinValue[index] &&
-              item.data[k]?.y <= props.yMaxValue[index]
+              item.data[k]?.y >= props.yMinValue &&
+              item.data[k]?.y <= props.yMaxValue
           );
         }
         return <div>dlkfj</div>;
@@ -93,12 +104,17 @@ function WaveLengthGraphData(props) {
     }
     setFinalData(filteredData);
   }
-
+  const csvReport = {
+    data: rowData,
+    headers: headers,
+    filename: props.dataType+'data_Normalized_Avg'+wave+'.csv'
+  };
   return (
     <div style={{ height: "60vh" }}>
       <h3 style={{ marginTop: 90, textAlign: "center" }}>
         {props.dataType} data : Normalized @ Avg_{wave}
       </h3>
+      <Button><CSVLink {...csvReport}>Export Data to CSV</CSVLink></Button>
       <ResponsiveLine
         data={finalData}
         theme={{

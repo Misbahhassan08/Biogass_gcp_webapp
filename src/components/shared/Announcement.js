@@ -12,7 +12,7 @@ function Announcment(){
            <div className="left-btns">
                 <Link to="/about" className =" text-uppercase semibold-corbel">About</Link>
                 <Link to="/faq" className ="text-uppercase semibold-corbel">FAQ</Link>
-                <Link  className ="text-uppercase semibold-corbel">V 1.6</Link>
+                <Link  className ="text-uppercase semibold-corbel">V 1.7 R2</Link>
            </div>
            <div className="mail-link ml-auto">
            <Link to="mailto:someone@example.com" className="nav-item nav-link p-0 me-4 text-dark"><FaIcons.FaEnvelope className="mail-icon" />example@email.com</Link>

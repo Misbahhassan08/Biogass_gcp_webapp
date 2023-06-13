@@ -1731,19 +1731,19 @@ button[type="submit"].mobile1:hover {
     display: none;
   }
 }
-.MuiOutlinedInput-notchedOutline {
+.dataTypeSelect .MuiOutlinedInput-notchedOutline {
   border-width: 1px !important;
   border-color: white !important;
 }
 
-.Mui-focused .MuiOutlinedInput-notchedOutline {
+.dataTypeSelect .Mui-focused .MuiOutlinedInput-notchedOutline {
   border-color: #ffc107 !important;
 }
 
-.MuiFormLabel-root,
-.MuiInputBase-input {
+.dataTypeSelect,
+.dataTypeInput {
   color: white !important;
-}
+} 
 
 .report-image {
   border-radius: 20px;
@@ -1756,13 +1756,13 @@ button[type="submit"].mobile1:hover {
   color: grey !important;
 }
 
-.TableDataRows td input {
+.TableDataRows, .sampleTableDataRows td input {
   text-align: center;
   border: none !important;
   margin-bottom: 0px !important;
 }
 
-.TableDataRows .form-control:focus {
+.TableDataRows, .sampleTableDataRows .form-control:focus {
   box-shadow: none !important;
 }
 
@@ -1804,4 +1804,46 @@ button[type="submit"].mobile1:hover {
 
 .Axis-Text-Field-Row:hover {
   background: #3996bd;
+}
+
+.sample-details th,
+.sample-details td {
+  border: 1px solid #f0aa2e ;
+  border-collapse: collapse;
+  text-align: center;
+  padding: 15px;
+}
+.sample-details th {
+  font-size: 18px;
+}
+.sample-details tr {
+  border: 0px !important;
+}
+.sample-details .one {
+  background: #2484ac;
+}
+.sample-details .one th {
+  color: #fff;
+}
+
+.sample-details .color_yel {
+  background-color: #f9dca9;
+}
+.sample-details .color_blue {
+  background-color: #b3e3e6;
+}
+
+.sample-details td{
+  height: 70px;
+  width: 50px;
+  padding: 0px;
+}
+
+.sample-details .bold-text{
+  color: #295073;
+  font-size: 18px;
+}
+
+.sampleTableDataRows .form-control{
+  background-color: transparent;
 }
