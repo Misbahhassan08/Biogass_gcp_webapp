@@ -3,19 +3,34 @@ import { ResponsiveLine } from "@nivo/line";
 import dayjs from "dayjs";
 import { CSVLink } from "react-csv";
 import { Button } from "react-bootstrap";
+import domtoimage from "dom-to-image";
+import { saveAs } from "file-saver";
+import XMLExport from "../../../XMLExport";
 
 function SensorGraphData(props) {
   const [finalData, setFinalData] = useState([]);
   const [sensorNum, setSensorNum] = useState("");
   const [isDataValid, setIsDataValid] = useState(false);
   const [headers, setheaders] = useState([
-  { label: "TimeStamp", key: "timestamp" },
-  { label: "_Avg_Vio_450nm", key: "vio" },
-  { label: "_Avg_Blu_500nm", key: "blu" },
-  { label: "_Avg_Grn_550nm", key: "grn" },
-  { label: "_Avg_Yel_570nm", key: "yel" },
-  { label: "_Avg_Org_600nm", key: "org" },
-  { label: "_Avg_Red_650nm", key: "red" },]);
+    { label: "TimeStamp", key: "timestamp" },
+    { label: "_Avg_Vio_450nm", key: "vio" },
+    { label: "_Avg_Blu_500nm", key: "blu" },
+    { label: "_Avg_Grn_550nm", key: "grn" },
+    { label: "_Avg_Yel_570nm", key: "yel" },
+    { label: "_Avg_Org_600nm", key: "org" },
+    { label: "_Avg_Red_650nm", key: "red" },
+  ]);
+
+  const fieldsAsObjects = {
+    "timestamp":"Date column header",
+    "vio": "vio column header",
+    "blu": "blue column header",
+    "grn": "green column header",
+    "yel": "yelloow column header",
+    "org": "orange data column header", 
+    "red":"red data column header"
+  };
+
   const [rowData, setrowData] = useState([]);
   const isDashboard = false;
   let graphs;
@@ -41,6 +56,20 @@ function SensorGraphData(props) {
     graphs = "Raw";
   } else if (props.graphs == "Nrm") {
     graphs = "Normalized";
+  }
+
+  function handleExportImage() {
+    const graphContainer = document.getElementById(
+      "graph-container" + graphs + sensorNum
+    );
+    domtoimage
+      .toBlob(graphContainer)
+      .then((blob) => {
+        saveAs(blob, "graph.png");
+      })
+      .catch((error) => {
+        console.error("Error exporting image:", error);
+      });
   }
 
   function showGraphData() {
@@ -90,23 +119,20 @@ function SensorGraphData(props) {
     ];
 
     for (let i = 0; i < sampleLength.length; i++) {
-      const time= parsedData[props.index].Samples[i].Time_Stamp.split(" ")[1]
+      const time = parsedData[props.index].Samples[i].Time_Stamp.split(" ")[1];
       const dataDateTime = dayjs(time, "HH:mm:ss");
       let row = {
-        timestamp : time.toString(),
-        vio :parsedData[props.index].Samples[i]?.[VioPoint],
-        blu :parsedData[props.index].Samples[i]?.[BluPoint],
-        grn :parsedData[props.index].Samples[i]?.[GrnPoint] ,
-        yel :parsedData[props.index].Samples[i]?.[YelPoint] ,
-        org :parsedData[props.index].Samples[i]?.[OrgPoint] ,
-        red :parsedData[props.index].Samples[i]?.[RedPoint] 
-      }
+        timestamp: time.toString(),
+        vio: parsedData[props.index].Samples[i]?.[VioPoint],
+        blu: parsedData[props.index].Samples[i]?.[BluPoint],
+        grn: parsedData[props.index].Samples[i]?.[GrnPoint],
+        yel: parsedData[props.index].Samples[i]?.[YelPoint],
+        org: parsedData[props.index].Samples[i]?.[OrgPoint],
+        red: parsedData[props.index].Samples[i]?.[RedPoint],
+      };
       // console.log(props.yMinValue[props.index], "this is y min value");
 
-      if (
-        dataDateTime >= props.xMinValue &&
-        dataDateTime <= props.xMaxValue
-      ) {
+      if (dataDateTime >= props.xMinValue && dataDateTime <= props.xMaxValue) {
         const text = [
           {
             data: [
@@ -157,7 +183,7 @@ function SensorGraphData(props) {
             ],
           },
         ];
-        setrowData(current => [...current, row])
+        setrowData((current) => [...current, row]);
         for (let i = 0; i <= 5; i++) {
           maindata[i]?.data.push(text[i]?.data[0]);
           filteredData = maindata.filter(
@@ -185,14 +211,26 @@ function SensorGraphData(props) {
   const csvReport = {
     data: rowData,
     headers: headers,
-    filename: graphs+'data_Normalize_P'+sensorNum+'.csv'
+    xsd_filename: graphs + "data_Normalize_P" + sensorNum + ".xml",
+    filename: graphs + "data_Normalize_P" + sensorNum + ".csv",
   };
   return (
-    <div style={{ height: "60vh" }}>
+    <div>
       <h3 style={{ marginTop: 90, textAlign: "center" }}>
         {graphs} data : Normalized P{sensorNum}
       </h3>
-      <Button><CSVLink {...csvReport}>Export Data to CSV</CSVLink></Button>
+      <Button type="submit" className="mx-2 menu-btn menu-btn1">
+        <CSVLink {...csvReport}>Export Data to CSV</CSVLink>
+      </Button>
+      <Button
+        type="submit"
+        className="mx-2 menu-btn menu-btn2"
+        onClick={handleExportImage}
+      >
+        Export Image
+      </Button>
+      <XMLExport data={rowData} fields={fieldsAsObjects} fileName={csvReport.xsd_filename} />
+      <div id={"graph-container" + graphs+ sensorNum} style={{ height: "60vh" }}>
         <ResponsiveLine
           data={finalData}
           theme={{
@@ -296,7 +334,7 @@ function SensorGraphData(props) {
             },
           ]}
         />
-      
+      </div>
     </div>
   );
 }

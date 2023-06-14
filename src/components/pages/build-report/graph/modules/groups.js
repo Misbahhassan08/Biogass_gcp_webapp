@@ -39,45 +39,46 @@ function Groups(props) {
       var settingObj = favList[index].SettingObj;
       var v = JSON.parse(settingObj.replace(/'/g, '"'));
       setFavListSettingObj(v);
+      localStorage.setItem("UserFavSettingObj", JSON.stringify(v))
       console.log(v, "setting object");
-      renderGraph(v);
+      // renderGraph(v);
     }
     // console.log(selectedFavList, "this is fav list");
   };
 
-  function renderGraph(favObj) {
-    //----------get sensor clicked data ---------------
-    const sensorclicked = favObj.Wells[0];
-    // console.log(sensorclicked, "sensorsclicked");
+  // function renderGraph(favObj) {
+  //   //----------get sensor clicked data ---------------
+  //   const sensorclicked = favObj.Wells[0];
+  //   // console.log(sensorclicked, "sensorsclicked");
 
-    //----------get datatype-----------------
-    let dataType;
-    if (favObj.Data.Raw) {
-      dataType = "Raw";
-    } else if (favObj.Data.Cal) {
-      dataType = "Cal";
-    } else if (favObj.Data.Nrm) {
-      dataType = "Nrm";
-    }
-    // console.log(dataType);
+  //   //----------get datatype-----------------
+  //   let dataType;
+  //   if (favObj.Data.Raw) {
+  //     dataType = "Raw";
+  //   } else if (favObj.Data.Cal) {
+  //     dataType = "Cal";
+  //   } else if (favObj.Data.Nrm) {
+  //     dataType = "Nrm";
+  //   }
+  //   // console.log(dataType);
 
-    //--------------- min and Max Time ----------------
+  //   //--------------- min and Max Time ----------------
 
-    const minTime = dayjs(favObj.ScaleGraph.xaxis.Min, "HH:mm:ss");
-    const maxTime = dayjs(favObj.ScaleGraph.xaxis.Max, "HH:mm:ss");
-    //console.log(maxTime);
+  //   const minTime = dayjs(favObj.ScaleGraph.xaxis.Min, "HH:mm:ss");
+  //   const maxTime = dayjs(favObj.ScaleGraph.xaxis.Max, "HH:mm:ss");
+  //   //console.log(maxTime);
 
-    //---------------min and max y ---------------
-    const minYValue = favObj.ScaleGraph.yaxis.Min;
-    const maxYValue = favObj.ScaleGraph.yaxis.Max;
+  //   //---------------min and max y ---------------
+  //   const minYValue = favObj.ScaleGraph.yaxis.Min;
+  //   const maxYValue = favObj.ScaleGraph.yaxis.Max;
 
-    props.getSensorsClicked([sensorclicked]);
-    props.getDataTypeClicked(dataType);
-    props.getMinTime(minTime);
-    props.getMaxTime(maxTime);
-    props.getMinYValue(minYValue);
-    props.getMaxYValue(maxYValue);
-  }
+  //   props.getSensorsClicked([sensorclicked]);
+  //   props.getDataTypeClicked(dataType);
+  //   props.getMinTime(minTime);
+  //   props.getMaxTime(maxTime);
+  //   props.getMinYValue(minYValue);
+  //   props.getMaxYValue(maxYValue);
+  // }
 
   function getFavList(id, name) {
     const data = [
@@ -223,7 +224,7 @@ function Groups(props) {
 
       <Col className="align-self-center">
         <Button type="submit" className=" menu-btn menu-btn2">
-          Get Settings
+          Add Group
         </Button>
       </Col>
     </Row>

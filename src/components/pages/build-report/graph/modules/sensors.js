@@ -12,7 +12,7 @@ function Sensors(props) {
   const [editA2, setEditA2] = useState(false);
   const [editA3, setEditA3] = useState(false);
   const [editA4, setEditA4] = useState(false);
-  
+
   const [editB0, setEditB0] = useState(false);
   const [editB1, setEditB1] = useState(false);
   const [editB2, setEditB2] = useState(false);
@@ -28,6 +28,7 @@ function Sensors(props) {
   const [clickedASensors, setclickedASensors] = useState([]);
   const [clickedBSensors, setclickedBSensors] = useState([]);
   const [clickedCSensors, setclickedCSensors] = useState([]);
+
   // const [sensorsClicked, setSensorsClicked] = useState([]);
 
   useEffect(() => {
@@ -92,22 +93,53 @@ function Sensors(props) {
 
   useEffect(() => {
     // const sensors = clickedASensors.concat(clickedBSensors.concat(clickedCSensors))
-    const sensors = [clickedASensors, clickedBSensors, clickedCSensors]
+    const sensors = [clickedASensors, clickedBSensors, clickedCSensors];
     // const sensors = {
     //   "A": [clickedASensors],
     //   "B": [clickedBSensors],
     //   "C": [clickedCSensors],    }
     // sensorsClicked(sensors);
-    props.getSensors(sensors)
+    props.getSensors(sensors);
   }, [clickedASensors, clickedBSensors, clickedCSensors]);
+
+  useEffect(() => {
+    if (props.settingsButtonClicked) {
+      const data = localStorage.getItem("UserFavSettingObj");
+      const parsedObj = JSON.parse(data);
+      const requiredSensors = parsedObj.Wells;
+      // console.log(parsedObj.Wells, "parsed object");
+
+        for (let i = 0; i < 3; i++) {
+          for (let j = 0; j < requiredSensors[i].length; j++) {
+            if (i == 0) {
+              const sensorValue = requiredSensors[i][j];
+              const stateVariable = `setEditA${sensorValue}`;
+              eval(`${stateVariable}(true);`);
+              // console.log(`setEditA${sensorValue}`, "this is the sensors in ", i);
+            }
+            if (i == 1) {
+              const sensorValue = requiredSensors[i][j];
+              const stateVariable = `setEditB${sensorValue}`;
+              eval(`${stateVariable}(true);`);
+            }
+            if (i == 2) {
+              const sensorValue = requiredSensors[i][j];
+              const stateVariable = `setEditC${sensorValue}`;
+              eval(`${stateVariable}(true);`);
+            }
+          }          
+        }
+      props.settingsButtonClickedFalse();
+    }
+  }, [props.settingsButtonClicked]);
 
   return (
     <>
       <Row>
         {/* sensors A */}
-        <Col className="col-md-4 Axis-Text-Field-Row">  
+        <Col className="col-md-4 Axis-Text-Field-Row">
           <Row>
-          <h5 className="text-white "> A </h5>
+            <h5 className="text-white "> A </h5>
             <FormControlLabel
               sx={{ color: "white" }}
               control={
@@ -190,9 +222,9 @@ function Sensors(props) {
         </Col>
 
         {/* sensors B */}
-        <Col className="col-md-4 Axis-Text-Field-Row">  
+        <Col className="col-md-4 Axis-Text-Field-Row">
           <Row>
-          <h5 className="text-white "> B </h5>
+            <h5 className="text-white "> B </h5>
             <FormControlLabel
               sx={{ color: "white" }}
               control={
@@ -275,9 +307,9 @@ function Sensors(props) {
         </Col>
 
         {/* sensors A */}
-        <Col className="col-md-4 Axis-Text-Field-Row">  
+        <Col className="col-md-4 Axis-Text-Field-Row">
           <Row>
-          <h5 className="text-white "> C </h5>
+            <h5 className="text-white "> C </h5>
             <FormControlLabel
               sx={{ color: "white" }}
               control={

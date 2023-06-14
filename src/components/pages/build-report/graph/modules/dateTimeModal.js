@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -6,7 +6,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MobileTimePicker } from "@mui/x-date-pickers";
 
 export default function DateTimeModal(props) {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(null);
 
   const handleValueChange = (newvalue) => {
     setValue(newvalue);
@@ -15,8 +15,15 @@ export default function DateTimeModal(props) {
 
   function handleAccept(){
     props.getDateTime(value, props.id)
-  //   console.log("clicked ok");
+    console.log(props, "props");
   }
+
+  useEffect(() => {
+    // if (props.settingsButtonClicked) {
+      setValue(props.value)
+    // }
+    console.log(props.value, "this is value of the ", props.id);
+  }, [props.settingsButtonClicked, props.value]);
 
   const style = {
     width: "50%",

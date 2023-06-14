@@ -28,7 +28,8 @@ function BuildReportGraph() {
   const [isCutomSetting, setIsCutomSetting] = useState(false);
   const [customSettingName, setCustomSettingName] = useState("");
   const [favList, setFavList] = useState();
-  const [gfsid, setGfsid] = useState()
+  const [gfsid, setGfsid] = useState();
+  const [settingsButtonClicked, setsettingsButtonClicked] = useState(false);
 
   function getSensorsClicked(value) {
     setSensor(value);
@@ -63,6 +64,15 @@ function BuildReportGraph() {
   function getCustomSettingName(value) {
     setCustomSettingName(value);
     // console.log(value, "this is custom setting");
+  }
+
+  function setFavSetting() {
+    setsettingsButtonClicked(true);
+    resetChart()
+  }
+
+  function settingButtonFalse() {
+    setsettingsButtonClicked(false);
   }
 
   function getFavList(value) {
@@ -210,7 +220,7 @@ function BuildReportGraph() {
       .then((data) => {
         let newdata = data["result"];
         console.log(newdata.GFSID);
-        setGfsid(newdata.GFSID)
+        setGfsid(newdata.GFSID);
       })
       .catch((err) => {
         console.log(err.message);
@@ -240,7 +250,16 @@ function BuildReportGraph() {
             </Card>
           </Container>
           <Container>
-          <Groups getGroupId={getGroupId} getFavList={getFavList} getSensorsClicked={getSensorsClicked} getDataTypeClicked={getDataTypeClicked} getMinTime={getMinTime} getMaxTime={getMaxTime} getMinYValue= {getMinYValue} getMaxYValue={getMaxYValue} />
+            <Groups
+              getGroupId={getGroupId}
+              getFavList={getFavList}
+              // getSensorsClicked={getSensorsClicked}
+              // getDataTypeClicked={getDataTypeClicked}
+              // getMinTime={getMinTime}
+              // getMaxTime={getMaxTime}
+              // getMinYValue={getMinYValue}
+              // getMaxYValue={getMaxYValue}
+            />
           </Container>
           <Container style={{ backgroundColor: "#2484ac" }}>
             <Row className="border-bottom border-warning">
@@ -283,7 +302,11 @@ function BuildReportGraph() {
                 className="p-3 col-md-6"
                 style={{ borderRight: "1px solid #ffc107" }}
               >
-                <Sensors getSensors={getSensorsClicked} />
+                <Sensors
+                  getSensors={getSensorsClicked}
+                  settingsButtonClicked={settingsButtonClicked}
+                  settingsButtonClickedFalse={settingButtonFalse}
+                />
               </Col>
               <Col className="py-3">
                 <TextFields
@@ -291,6 +314,8 @@ function BuildReportGraph() {
                   getMinTime={getMinTime}
                   getMinYValue={getMinYValue}
                   getMaxYValue={getMaxYValue}
+                  settingsButtonClicked={settingsButtonClicked}
+                  settingsButtonClickedFalse={settingButtonFalse}
                 />
               </Col>
             </Row>
@@ -301,7 +326,11 @@ function BuildReportGraph() {
                 <h5 className="text-white">Data Type:</h5>
               </Col>
               <Col className="py-3" style={{ borderLeft: "1px solid #ffc107" }}>
-                <DataTypeSelect getDataType={getDataTypeClicked} />
+                <DataTypeSelect
+                  getDataType={getDataTypeClicked}
+                  settingsButtonClicked={settingsButtonClicked}
+                  settingsButtonClickedFalse={settingButtonFalse}
+                />
               </Col>
             </Row>
           </Container>
@@ -319,8 +348,12 @@ function BuildReportGraph() {
                 </Button>
               </Col> */}
               <Col>
-                <Button type="submit" className="mx-2 menu-btn menu-btn2">
-                  Add Group
+                <Button
+                  type="submit"
+                  className="mx-2 menu-btn menu-btn2"
+                  onClick={setFavSetting}
+                >
+                  Set Settings
                 </Button>
               </Col>
               <Col>
@@ -329,7 +362,11 @@ function BuildReportGraph() {
                 </Button>
               </Col>
               <Col>
-                <Button type="submit" className="mx-2 menu-btn menu-btn2" onClick={requestData}>
+                <Button
+                  type="submit"
+                  className="mx-2 menu-btn menu-btn2"
+                  onClick={requestData}
+                >
                   Apply
                 </Button>
               </Col>
@@ -368,19 +405,23 @@ function BuildReportGraph() {
               )
             : // ))
               checkResponse &&
-              renderGraphData.map((item, index) => (
-                console.log(renderGraphData, "this is the index"),
-                <SimpleGraphData
-                  key={index}
-                  dataType={graphName}
-                  xMinValue={minTime}
-                  xMaxValue={maxTime}
-                  yMinValue={minYValue}
-                  yMaxValue={maxYValue}
-                  resetChart={resetChart}
-                  index={index}
-                />
-              ))}
+              renderGraphData.map(
+                (item, index) => (
+                  console.log(renderGraphData, "this is the index"),
+                  (
+                    <SimpleGraphData
+                      key={index}
+                      dataType={graphName}
+                      xMinValue={minTime}
+                      xMaxValue={maxTime}
+                      yMinValue={minYValue}
+                      yMaxValue={maxYValue}
+                      resetChart={resetChart}
+                      index={index}
+                    />
+                  )
+                )
+              )}
         </div>
       </div>
     </>

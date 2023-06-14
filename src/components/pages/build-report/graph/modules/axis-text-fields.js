@@ -5,9 +5,9 @@ import { Checkbox } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import DateTimeModal from "./dateTimeModal";
 import { useState } from "react";
+import dayjs from "dayjs"
 
 function TextFields(props) {
-
   const [xMinValue, setXMinValue] = useState();
   const [xMaxValue, setXMaxValue] = useState();
 
@@ -59,10 +59,31 @@ function TextFields(props) {
     // console.log(yMaxValue, 'yMaxValue');
   }, [xMinValue, xMaxValue, yMinValue, yMaxValue]);
 
+  useEffect(() => {
+    if (props.settingsButtonClicked) {
+      const data = localStorage.getItem("UserFavSettingObj");
+      const parsedObj = JSON.parse(data);
+      const minX = dayjs(parsedObj.ScaleGraph.xaxis.Min, "HH:mm:ss");
+      const maxX = dayjs(parsedObj.ScaleGraph.xaxis.Max, "HH:mm:ss");
+      const minY = parsedObj.ScaleGraph.yaxis.Min;
+      const maxY = parsedObj.ScaleGraph.yaxis.Max;
+      // console.log(dayjs(minX, "HH:mm:ss"), "parsed object");
+      // console.log(maxX, "parsed object");
+
+      setXMinValue(minX)
+      setXMaxValue(maxX)
+
+      setYMinValue(minY)
+      setYMaxValue(maxY)
+
+
+      props.settingsButtonClickedFalse();
+    }
+  }, [props.settingsButtonClicked]);
+
   return (
     <>
       <Row className="Axis-Text-Field-Row">
-
         {/* P0 X AXIS COL */}
         <Col className="align-self-center">
           <div style={{ display: "flex", gap: 13 }}>
@@ -72,6 +93,8 @@ function TextFields(props) {
               style={style}
               id={"x-min"}
               getDateTime={getDateTime}
+              settingsButtonClicked={props.settingsButtonClicked}
+              value={xMinValue}
             />
 
             {/* P0 X MAX */}
@@ -80,6 +103,8 @@ function TextFields(props) {
               style={style}
               id={"x-max"}
               getDateTime={getDateTime}
+              settingsButtonClicked={props.settingsButtonClicked}
+              value={xMaxValue}
             />
           </div>
         </Col>
@@ -117,7 +142,6 @@ function TextFields(props) {
           </div>
         </Col>
       </Row>
-
     </>
   );
 }
