@@ -1,24 +1,51 @@
 import React,{useState,useEffect} from "react";
 import {useNavigate} from "react-router-dom"
 import { Card,Container,Row,Form,Button } from 'react-bootstrap'
-
+import { baseApiUrl } from "../../config";
+import { fetchPostReq } from "../../services/restService";
+const check_login_endpoint = baseApiUrl + "/api/check_login";
 function Login(){
-    useEffect(() => {
-        document.title = "Acenxion | Lab Login"
-    }, []);
+    //
+    //
 
     let navigate = useNavigate();
     const [validated, setValidated] = useState(false);
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [data, setData] = useState();
 
+    useEffect(() => {
+        document.title = "Acenxion | Lab Login"
+        const dataFetch = async () => {
+            const data = await (
+              await fetch(check_login_endpoint)).json();
+            setData(data);
+            
+          };
+          dataFetch();
+    }, []);
+
+    
+     
+    
     const handleSubmit = (event) => {
         const form = event.currentTarget;
+        const myresult = false;
         if (form.checkValidity() === false) {
           event.preventDefault();
           event.stopPropagation();
         }else{
-          navigate(process.env.PUBLIC_URL+'/readerstatus');
+            let _uname = document.getElementById("uname").value;
+            let _pass = document.getElementById("inputPinPassword").value;
+            //pass: "acxbio"
+            //uname: "acenxion"
+        if (_uname === data["uname"]){
+            if (_pass === data["pass"]){
+                navigate(process.env.PUBLIC_URL+'/readerstatus');
+            }
         }
-    
+        
+        }
+        
         setValidated(true);
     };
 

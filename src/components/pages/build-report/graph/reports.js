@@ -9,6 +9,9 @@ import Sensors from "./modules/sensors";
 import CustomFavNameDialog from "./modules/customFav";
 import { baseApiUrl } from "../../../../config";
 import dayjs from "dayjs";
+import WaveTypeSelect from './modules/waveType'
+import { fetchPostReq } from "../../../../services/restService";
+
 
 function BuildReportGraph() {
   const get_graph_data = baseApiUrl + "/api/get_graph_meta_data";
@@ -16,6 +19,7 @@ function BuildReportGraph() {
 
   const [sensor, setSensor] = useState([]);
   const [dataType, setDataType] = useState();
+  const [waveType, setWaveType] = useState();
   const [checkResponse, setCheckResponse] = useState(false);
   const [renderGraphData, setRenderGraphData] = useState();
   const [graphName, setGraphName] = useState();
@@ -33,6 +37,11 @@ function BuildReportGraph() {
 
   function getSensorsClicked(value) {
     setSensor(value);
+  }
+
+  function getWaveTypeClicked(value) {
+    setWaveType(value);
+    console.log(value, "wave type clicked");
   }
 
   function getDataTypeClicked(value) {
@@ -148,7 +157,8 @@ function BuildReportGraph() {
     setCheckResponse(false);
   }
 
-  function customSettingsObject() {
+  const customSettingsObject = async () => {
+    //-----------setting the dataType object in custom favList-------------------
     let type = {};
     switch (dataType) {
       case "Raw":
@@ -176,6 +186,32 @@ function BuildReportGraph() {
         break;
     }
 
+    //-----------setting the waveType object in custom favList-------------------
+
+    let wave = {
+      Wavelength: [
+        {
+          ALL: false,
+        },
+        {
+          Vio: false,
+          Blu: false,
+          Grn: false,
+          Red: false,
+          Yel: false,
+          Org: false,
+        },
+      ],
+    };
+
+    if (waveType === "All") {
+      wave.Wavelength[0].ALL = true;
+    } else {
+      
+      wave.Wavelength[1][waveType] = true;
+      console.log(wave.Wavelength[1][waveType], " rhid id slec");
+    }
+
     const data = {
       GroupID: selectedGroupId,
       Fav_setting_name: customSettingName,
@@ -191,42 +227,14 @@ function BuildReportGraph() {
         },
       },
       Data: type,
-      Wavelength: [
-        {
-          ALL: true,
-        },
-        {
-          Vio: false,
-          Blu: false,
-          Grn: false,
-          Red: false,
-          Yel: false,
-          Org: false,
-        },
-      ],
+      Wavelength: wave.Wavelength,
     };
 
     //---------- save custom object -----------
 
-    fetch(save_fav_setting, {
-      method: "POST",
-      body: JSON.stringify(data),
-      cors: "no-cors",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        let newdata = data["result"];
-        console.log(newdata.GFSID);
-        setGfsid(newdata.GFSID);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
-    console.log(data, "this is object");
-  }
+    const result = await fetchPostReq(save_fav_setting, data);
+    console.log(result, "this is the result from the API request");
+  };
 
   useEffect(() => {
     document.title = "Build Report";
@@ -328,6 +336,20 @@ function BuildReportGraph() {
               <Col className="py-3" style={{ borderLeft: "1px solid #ffc107" }}>
                 <DataTypeSelect
                   getDataType={getDataTypeClicked}
+                  settingsButtonClicked={settingsButtonClicked}
+                  settingsButtonClickedFalse={settingButtonFalse}
+                />
+              </Col>
+            </Row>
+          </Container>
+          <Container className="mt-5" style={{ backgroundColor: "#2484ac" }}>
+            <Row>
+              <Col className="p-3 mt-2 col-md-6 align-self-center">
+                <h5 className="text-white">Wave Type:</h5>
+              </Col>
+              <Col className="py-3" style={{ borderLeft: "1px solid #ffc107" }}>
+                <WaveTypeSelect
+                  getWaveType={getWaveTypeClicked}
                   settingsButtonClicked={settingsButtonClicked}
                   settingsButtonClickedFalse={settingButtonFalse}
                 />
