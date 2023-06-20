@@ -23,12 +23,9 @@ function Groups(props) {
 
   const [favList, setFavList] = useState([]);
 
-  // const get_list_of_groups = baseApiUrl + "/api/get_list_of_group";
-  // const get_list_of_fav_setting = baseApiUrl + "/api/get_list_of_fav_settings";
-  const get_list_of_groups =
-    "https://bc0f-182-185-136-133.ngrok-free.app/api/get_list_of_group";
-  const get_list_of_fav_setting =
-    "https://bc0f-182-185-136-133.ngrok-free.app/api/get_list_of_fav_settings";
+  const get_list_of_groups = baseApiUrl + "/api/get_list_of_group";
+  const get_list_of_fav_setting = baseApiUrl + "/api/get_list_of_fav_settings";
+ 
 
   const handleGroupIDChange = (event) => {
     const selectedGroupId = event.target.value;
