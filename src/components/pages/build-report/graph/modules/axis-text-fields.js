@@ -8,11 +8,11 @@ import { useState } from "react";
 import dayjs from "dayjs"
 
 function TextFields(props) {
-  const [xMinValue, setXMinValue] = useState();
-  const [xMaxValue, setXMaxValue] = useState();
+  const [xMinValue, setXMinValue] = useState("");
+  const [xMaxValue, setXMaxValue] = useState("");
 
-  const [yMinValue, setYMinValue] = useState();
-  const [yMaxValue, setYMaxValue] = useState();
+  const [yMinValue, setYMinValue] = useState("");
+  const [yMaxValue, setYMaxValue] = useState("");
 
   const style = {
     width: "50%",

@@ -5,7 +5,7 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import { CSVLink } from "react-csv";
 import domtoimage from "dom-to-image";
 import { saveAs } from "file-saver";
-import XMLExport from "../../XMLExport";
+import XMLExport from "../../../XMLExport";
 
 function SimpleGraphData(props) {
   const [finalData, setFinalData] = useState([]);

@@ -3,49 +3,31 @@ import { Card, Container, Row, Col, Button, Table } from "react-bootstrap";
 import TableRows from "./modules/TableRows";
 import CSVRows from "./modules/csvRows";
 import { baseApiUrl } from "../../../../config";
+import { fetchGetReq, fetchPostReq } from "../../../../services/restService";
 
 function BuildReportGrid() {
   const get_csv_list_endpoint = baseApiUrl + "/api/get_list_of_csv";
-  const post_metaData_endpoint =baseApiUrl + "/api/get_meta_data";
+  const post_metaData_endpoint = baseApiUrl + "/api/get_meta_data";
   const [rowsData, setRowsData] = useState([]);
   const [csvRowsData, setCsvRowsData] = useState();
 
   // ------------------------------------------------------ POSTING DATA FROM HERE --------------------------------------
-  function checkData() {
-    fetch(post_metaData_endpoint, {
-      method: "POST",
-      body: JSON.stringify({
-        filedire: ".2023",
-        userId: Math.random().toString(36).slice(2),
-      }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        let newdata = data["result"];
-        console.log(newdata);
-        setRowsData(newdata);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+  async function checkData() {
+    const reqCsv = {
+      filedire: ".2023",
+      userId: Math.random().toString(36).slice(2),
+    };
+
+    const tableData = await fetchPostReq(post_metaData_endpoint, reqCsv);
+    setRowsData(tableData.result);
   }
 
-  useEffect(() => {
+  useEffect(async () => {
     //mqtt.requestData('biogas/client/request/database/csvtbl/data', JSON.stringify({data:"misbah"}))
     document.title = "Build Report";
-    fetch(get_csv_list_endpoint)
-      .then((res) => res.json())
-      .then((data) => {
-        let newdata = data["result"];
-        console.log(newdata);
-        setCsvRowsData(newdata);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+    const csvList = await fetchGetReq(get_csv_list_endpoint);
+    console.log(csvList.result, "this is csv lsit");
+    setCsvRowsData(csvList.result);
   }, []);
 
   return (

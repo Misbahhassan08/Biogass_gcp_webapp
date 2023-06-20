@@ -1,19 +1,22 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import { Checkbox } from "@mui/material";
 import Select from "@mui/material/Select";
 
 function DataTypeSelect(props) {
   const [dataType, setDataType] = React.useState("");
+  const [isNrm, setisNrm] = useState(false);
 
   const handleChange = (event) => {
     setDataType(event.target.value);
   };
 
   useEffect(() => {
-    props.getDataType(dataType);
-  }, [dataType]);
+    props.getDataType(dataType, isNrm);
+  }, [dataType, isNrm]);
 
   useEffect(() => {
     if (props.settingsButtonClicked) {
@@ -27,7 +30,7 @@ function DataTypeSelect(props) {
       } else if (requiredDataType.Cal) {
         setDataType("Cal");
       } else if (requiredDataType.Nrm) {
-        setDataType("Nrm");
+        setisNrm(true)
       }
 
       props.settingsButtonClickedFalse();
@@ -58,9 +61,23 @@ function DataTypeSelect(props) {
         >
           <MenuItem value={"Raw"}>Raw Data</MenuItem>
           <MenuItem value={"Cal"}>Calibrated</MenuItem>
-          <MenuItem value={"Nrm"}>Normalized</MenuItem>
+          {/* <MenuItem value={"Nrm"}>Normalized</MenuItem> */}
         </Select>
       </FormControl>
+      <FormControlLabel
+        sx={{ color: "white" }}
+        control={
+          <Checkbox
+            id="normalized"
+            style={{ color: "white" }}
+            checked={isNrm}
+            onChange={(e) => {
+              setisNrm(e.target.checked)
+            }}
+          />
+        }
+        label="Normalized"
+      />
     </div>
   );
 }

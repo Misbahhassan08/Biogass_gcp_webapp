@@ -17,6 +17,8 @@ function WaveLengthGraphData(props) {
   const isDashboard = false;
   let wave;
 
+  console.log(props.wave, "this is the props wave");
+
   switch (props.wave) {
     case "Vio":
       wave = "Vio_450nm";
@@ -142,10 +144,15 @@ function WaveLengthGraphData(props) {
     xsd_filename: props.dataType + "data_Normalized_Avg" + wave + ".xml",
     filename: props.dataType + "data_Normalized_Avg" + wave + ".csv",
   };
+
+  const graphHeadingText = props.isNrm
+    ? `${props.dataType} Single_WaveLength : Normalized @ Avg_${wave}`
+    : `${props.dataType} Single_WaveLength : Avg_${wave}`;
+
   return (
     <div>
       <h3 style={{ marginTop: 90, textAlign: "center" }}>
-        {props.dataType} data : Normalized @ Avg_{wave}
+        {graphHeadingText}
       </h3>
       <Button type="submit" className="mx-2 menu-btn menu-btn1">
         <CSVLink {...csvReport}>Export Data to CSV</CSVLink>

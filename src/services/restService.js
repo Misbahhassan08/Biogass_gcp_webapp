@@ -18,7 +18,7 @@ export const fetchPostReq = async (apiUrl, dataObj) => {
         console.log(err.message);
     });
 
-    console.log(response, "response");
+    // console.log(response, "response");
 
     return response;
 };
@@ -26,10 +26,9 @@ export const fetchPostReq = async (apiUrl, dataObj) => {
 export const fetchGetReq = async (apiUrl)=>{
   const response = fetch(apiUrl)
   .then((response) => response.json())
-  
   .catch((err) => {
     console.log(err.message);
   });
-  console.log(response, "response");
+  // console.log(response, "response");
   return response;
 }
