@@ -9,7 +9,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { fetchPostReq } from "../../../../../../services/restService";
 
 export default function AddGroupDialog(props) {
-  const api_add_group = "https://bc0f-182-185-136-133.ngrok-free.app/api/add_group"
+  const api_add_group = "https://biomass-gcp-server-rnt37kunua-uc.a.run.app/api/add_group"
   const [groupName, setGroupName] = useState("");
 
   function handleGroupName(event) {
