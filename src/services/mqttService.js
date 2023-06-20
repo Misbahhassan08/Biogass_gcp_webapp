@@ -10,7 +10,7 @@ export class Mqtt extends Component {
 
   clientId = "mqttjs_" + Math.random().toString(16).substr(2, 8);
 
-  host = "ws://broker.emqx.io:8083/mqtt";
+  host = "ws://broker.emqx.io:8000/mqtt";
 
   options = {
     keepalive: 160,
