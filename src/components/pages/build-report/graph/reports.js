@@ -40,49 +40,53 @@ function BuildReportGraph() {
   //-------------------functions to get values form childs ----------------------------------
   function getSensorsClicked(value) {
     setSensor(value);
+    resetChart();
   }
 
   function getWaveTypeClicked(value) {
     setWaveType(value);
-    console.log(value, "wave type clicked");
+    // console.log(value, "wave type clicked");
+    resetChart();
   }
 
   function getDataTypeClicked(dataType, isNrm) {
     setDataType(dataType);
     setIsNrm(isNrm);
-    console.log(dataType, "is data type with normalized", isNrm);
+    // console.log(dataType, "is data type with normalized", isNrm);
+    resetChart();
   }
 
   function getMinTime(value) {
     setMinTime(value);
+    resetChart();
   }
 
   function getMaxTime(value) {
     setMaxTime(value);
+    resetChart();
   }
 
   function getMinYValue(value) {
     setMinYValue(value);
     // console.log(value,"this is the y min value");
+    resetChart();
   }
 
   function getMaxYValue(value) {
     setMaxYValue(value);
     // console.log(value, "this is the y max value");
+    resetChart();
   }
 
   function getGroupId(value) {
     setselectedGroupId(value);
+    resetChart();
   }
 
   function getCustomSettingName(value) {
     setCustomSettingName(value);
     // console.log(value, "this is custom setting");
-  }
-
-  function getNewGroupName(value) {
-    setCustomSettingName(value)
-    console.log(value, "new group name");
+    resetChart();
   }
 
   function setFavSetting() {
@@ -101,6 +105,7 @@ function BuildReportGraph() {
     } else {
       setIsCutomSetting(true);
     }
+    resetChart();
   }
 
   // function getFavList(value) {
@@ -182,7 +187,12 @@ function BuildReportGraph() {
           Nrm: false,
         };
         break;
-      case "Nrm":
+      default:
+        break;
+    }
+
+    switch (isNrm) {
+      case true:
         type = {
           Raw: false,
           Cal: false,
@@ -264,70 +274,148 @@ function BuildReportGraph() {
             </Card>
           </Container>
           <Container>
-            <Groups
-              getGroupId={getGroupId}
-              getFavList={getFavList}
-              // getGroupName ={}
-            />
-          </Container>
-          <Container style={{ backgroundColor: "#2484ac" }}>
-            <Row className="border-bottom border-warning">
-              <Col className="p-3 mt-2 align-self-center ">
-                <h4 className="color-yellow">Format Graph</h4>
-              </Col>
-              <Col className="p-3" style={{ borderLeft: "1px solid #ffc107" }}>
-                <Row>
-                  <Col className="text-center pe-4">
-                    <Row className="text-warning">
-                      <span>X-axis</span>
-                    </Row>
-                    <Row className="text-white">
-                      <Col>
-                        <span>Min</span>
-                      </Col>
-                      <Col>
-                        <span>Max</span>
-                      </Col>
-                    </Row>
+            <Row>
+              <div className="col-md-3">
+                <Groups
+                  getGroupId={getGroupId}
+                  getFavList={getFavList}
+                  setFavSetting={setFavSetting}
+                  // getGroupName ={}
+                />
+              </div>
+              <div className="col-md-9" style={{ backgroundColor: "#2484ac" }}>
+                <Row className="border-bottom border-warning">
+                  <Col className="p-3 mt-2 align-self-center ">
+                    <h4 className="color-yellow">Wells</h4>
                   </Col>
-                  <Col className="text-center pe-4">
-                    <Row className="text-warning">
-                      <span>Y-axis</span>
-                    </Row>
-                    <Row className="text-white">
-                      <Col>
-                        <span>Min</span>
+                  <Col
+                    className="p-3"
+                    style={{ borderLeft: "1px solid #ffc107" }}
+                  >
+                    <Row>
+                      <Col className="text-center pe-4">
+                        <Row className="text-warning">
+                          <span>X-axis</span>
+                        </Row>
+                        <Row className="text-white">
+                          <Col>
+                            <span>Min</span>
+                          </Col>
+                          <Col>
+                            <span>Max</span>
+                          </Col>
+                        </Row>
                       </Col>
-                      <Col>
-                        <span>Max</span>
+                      <Col className="text-center pe-4">
+                        <Row className="text-warning">
+                          <span>Y-axis</span>
+                        </Row>
+                        <Row className="text-white">
+                          <Col>
+                            <span>Min</span>
+                          </Col>
+                          <Col>
+                            <span>Max</span>
+                          </Col>
+                        </Row>
                       </Col>
                     </Row>
                   </Col>
                 </Row>
-              </Col>
+                <Row>
+                  <Col
+                    className="p-3 col-md-6"
+                    style={{ borderRight: "1px solid #ffc107" }}
+                  >
+                    <Sensors
+                      getSensors={getSensorsClicked}
+                      settingsButtonClicked={settingsButtonClicked}
+                      settingsButtonClickedFalse={settingButtonFalse}
+                    />
+                  </Col>
+                  <Col className="py-3">
+                    <TextFields
+                      getMaxTime={getMaxTime}
+                      getMinTime={getMinTime}
+                      getMinYValue={getMinYValue}
+                      getMaxYValue={getMaxYValue}
+                      settingsButtonClicked={settingsButtonClicked}
+                      settingsButtonClickedFalse={settingButtonFalse}
+                    />
+                  </Col>
+                </Row>
+              </div>
             </Row>
-            <Row>
-              <Col
-                className="p-3 col-md-6"
-                style={{ borderRight: "1px solid #ffc107" }}
-              >
-                <Sensors
-                  getSensors={getSensorsClicked}
-                  settingsButtonClicked={settingsButtonClicked}
-                  settingsButtonClickedFalse={settingButtonFalse}
-                />
+          </Container>
+          <Container style={{ backgroundColor: "#2484ac" }}>
+            {/* <Row>
+              <Col>
+              <Groups
+                getGroupId={getGroupId}
+                getFavList={getFavList}
+                setFavSetting={setFavSetting}
+                // getGroupName ={}
+              />
               </Col>
-              <Col className="py-3">
-                <TextFields
-                  getMaxTime={getMaxTime}
-                  getMinTime={getMinTime}
-                  getMinYValue={getMinYValue}
-                  getMaxYValue={getMaxYValue}
-                  settingsButtonClicked={settingsButtonClicked}
-                  settingsButtonClickedFalse={settingButtonFalse}
-                />
+              <Col><Row className="border-bottom border-warning">
+                <Col className="p-3 mt-2 align-self-center ">
+                  <h4 className="color-yellow">Format Graph</h4>
+                </Col>
+                <Col className="p-3" style={{ borderLeft: "1px solid #ffc107" }}>
+                  <Row>
+                    <Col className="text-center pe-4">
+                      <Row className="text-warning">
+                        <span>X-axis</span>
+                      </Row>
+                      <Row className="text-white">
+                        <Col>
+                          <span>Min</span>
+                        </Col>
+                        <Col>
+                          <span>Max</span>
+                        </Col>
+                      </Row>
+                    </Col>
+                    <Col className="text-center pe-4">
+                      <Row className="text-warning">
+                        <span>Y-axis</span>
+                      </Row>
+                      <Row className="text-white">
+                        <Col>
+                          <span>Min</span>
+                        </Col>
+                        <Col>
+                          <span>Max</span>
+                        </Col>
+                      </Row>
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
+              <Row>
+                <Col
+                  className="p-3 col-md-6"
+                  style={{ borderRight: "1px solid #ffc107" }}
+                >
+                  <Sensors
+                    getSensors={getSensorsClicked}
+                    settingsButtonClicked={settingsButtonClicked}
+                    settingsButtonClickedFalse={settingButtonFalse}
+                  />
+                </Col>
+                <Col className="py-3">
+                  <TextFields
+                    getMaxTime={getMaxTime}
+                    getMinTime={getMinTime}
+                    getMinYValue={getMinYValue}
+                    getMaxYValue={getMaxYValue}
+                    settingsButtonClicked={settingsButtonClicked}
+                    settingsButtonClickedFalse={settingButtonFalse}
+                  />
+                </Col>
+              </Row>
               </Col>
-            </Row>
+            </Row> */}
           </Container>
           <Container className="mt-5" style={{ backgroundColor: "#2484ac" }}>
             <Row>
@@ -371,15 +459,6 @@ function BuildReportGraph() {
                 </Button>
               </Col> */}
               <Col>
-                <Button
-                  type="submit"
-                  className="mx-2 menu-btn menu-btn2"
-                  onClick={setFavSetting}
-                >
-                  Set Settings
-                </Button>
-              </Col>
-              <Col>
                 <Button type="submit" className="mx-2 menu-btn menu-btn1">
                   Cancel
                 </Button>
@@ -390,7 +469,7 @@ function BuildReportGraph() {
                   className="mx-2 menu-btn menu-btn2"
                   onClick={requestData}
                 >
-                  Apply
+                  Show Graph
                 </Button>
               </Col>
               <Col>

@@ -7,41 +7,38 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { fetchPostReq } from "../../../../../../services/restService";
+import { baseApiUrl } from "../../../../../../config";
 
 export default function AddGroupDialog(props) {
-  const api_add_group = "https://bc0f-182-185-136-133.ngrok-free.app/api/add_group"
+  const api_add_group = baseApiUrl + "/api/add_group";
   const [groupName, setGroupName] = useState("");
 
   function handleGroupName(event) {
     setGroupName(event.target.value);
   }
 
-  function handleSubmit(){
-    const data ={
-      group_name: groupName
-    }
+  function handleSubmit() {
+    const data = {
+      group_name: groupName,
+    };
     props.close();
-    sendPostReq(api_add_group ,data);
+    sendPostReq(api_add_group, data);
   }
-  
-  const sendPostReq = async (url, data)=>{
-    const response = await fetchPostReq(url, data)
+
+  const sendPostReq = async (url, data) => {
+    const response = await fetchPostReq(url, data);
     if (response.result[0] === "Success") {
       window.location.reload();
-      
     }
 
-    console.log('====================================');
+    console.log("====================================");
     console.log(response.result);
-    console.log('====================================');
-  }
+    console.log("====================================");
+  };
 
   return (
     <div>
-      <Dialog
-        open={props.open}
-        disableEscapeKeyDown
-      >
+      <Dialog open={props.open} disableEscapeKeyDown>
         <DialogTitle>Enter New Group Name</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -60,16 +57,8 @@ export default function AddGroupDialog(props) {
           />
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={props.close}
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={handleSubmit}
-          >
-            Submit
-          </Button>
+          <Button onClick={props.close}>Cancel</Button>
+          <Button onClick={handleSubmit}>Submit</Button>
         </DialogActions>
       </Dialog>
     </div>

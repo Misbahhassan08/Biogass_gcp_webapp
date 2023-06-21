@@ -36,15 +36,16 @@ function CSVRows(props) {
           />
         </td>
         <td>
+        <Link to={process.env.PUBLIC_URL + "/build-report/graph"}>
             <Button
               type="submit"
               className="mx-2 menu-btn menu-btn1"
               onClick={() => {
-                props.checkData()
               }}
             >
               Report
             </Button>
+          </Link>
         </td>
       </tr>
     );

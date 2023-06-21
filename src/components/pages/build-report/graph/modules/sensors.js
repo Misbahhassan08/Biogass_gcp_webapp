@@ -109,7 +109,19 @@ function Sensors(props) {
       const requiredSensors = parsedObj.Wells;
       // console.log(parsedObj.Wells, "parsed object");
 
-        for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < 5; i++) {
+        const stateNameA = `setEditA${i}`;
+        eval(`${stateNameA}(false);`);
+
+        const stateNameB = `setEditB${i}`;
+        eval(`${stateNameB}(false);`);
+
+        const stateNameC = `setEditC${i}`;
+        eval(`${stateNameC}(false);`);
+              
+      }  
+      
+      for (let i = 0; i < 3; i++) {
           for (let j = 0; j < requiredSensors[i].length; j++) {
             if (i == 0) {
               const sensorValue = requiredSensors[i][j];

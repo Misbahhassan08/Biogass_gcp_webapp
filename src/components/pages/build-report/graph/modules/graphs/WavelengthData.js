@@ -83,8 +83,9 @@ function WaveLengthGraphData(props) {
 
       for (let j = 0; j < samples.length; j++) {
         // const dataDateTime = dayjs(parsedData[i].Samples[j].Time_Stamp);
-        const time = parsedData[i].Samples[j].Time_Stamp.split(" ")[1];
-        const dataDateTime = dayjs(time, "HH:mm:ss");
+        const timeString = parsedData[i].Samples[j].Time_Stamp.split(" ")[1];
+
+        const dataDateTime = dayjs(timeString, "HH:mm:ss");
 
         // console.log(props.xMinValue[i], "these are the min Value");
         // console.log(props.xMaxValue[i], "these are the max Value");
@@ -97,11 +98,12 @@ function WaveLengthGraphData(props) {
           const firstValue = samples[0][props.dataType + "_Avg_" + wave];
 
           const time = samples[j].Time_Stamp.split(" ")[1];
+          // const time = timeString.substring(0, 5);
           let value;
           if (props.isNrm) {
             value =
               samples[j][props.dataType + "_Avg_" + wave] / firstValue - 1;
-              // console.log(value, "this is value");
+            // console.log(value, "this is value");
           } else {
             value = samples[j][props.dataType + "_Avg_" + wave];
             console.log(value, "this is value");
@@ -124,15 +126,15 @@ function WaveLengthGraphData(props) {
       console.log(_result[i].data, "this is result data at", i);
 
       props.yValueLoop.map((item, index) => {
-      for (let k = 0; k < _result[i].data.length; k++) {
-        // console.log("######## ---- Idex of Y axis = "+ i + "and result = "+ result[i].data[0][0])
-        filteredData = _result.filter(
-          (item) =>
-            // console.log(item.data[k]?.y, "this is data at" ,k)
-            item.data[k]?.y >= props.yMinValue &&
-            item.data[k]?.y <= props.yMaxValue
-        );
-      }
+        for (let k = 0; k < _result[i].data.length; k++) {
+          // console.log("######## ---- Idex of Y axis = "+ i + "and result = "+ result[i].data[0][0])
+          filteredData = _result.filter(
+            (item) =>
+              // console.log(item.data[k]?.y, "this is data at" ,k)
+              item.data[k]?.y >= props.yMinValue &&
+              item.data[k]?.y <= props.yMaxValue
+          );
+        }
       });
       // setFilteredData((prevFilteredData) => filterd);
     }
@@ -151,9 +153,7 @@ function WaveLengthGraphData(props) {
 
   return (
     <div>
-      <h3 style={{ marginTop: 90, textAlign: "center" }}>
-        {graphHeadingText}
-      </h3>
+      <h3 style={{ marginTop: 90, textAlign: "center" }}>{graphHeadingText}</h3>
       <Button type="submit" className="mx-2 menu-btn menu-btn1">
         <CSVLink {...csvReport}>Export Data to CSV</CSVLink>
       </Button>
@@ -210,7 +210,15 @@ function WaveLengthGraphData(props) {
           }}
           colors={{ scheme: "nivo" }}
           margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
-          xScale={{ type: "point" }}
+          xScale={{
+            type: "time",
+            format: "%H:%M:%S",
+            precision: "second",
+            useUTC: false,
+            min: "auto",
+            max: "auto",
+          }}
+          xFormat="time:%H:%M:%S"
           yScale={{
             type: "linear",
             min: "auto",
@@ -227,9 +235,11 @@ function WaveLengthGraphData(props) {
             tickSize: 7,
             tickPadding: 5,
             tickRotation: 40,
-            legend: isDashboard ? undefined : "Time", // added
+            legend:"Time", // added
             legendOffset: 46,
             legendPosition: "middle",
+            format: "%H:%M",
+            tickValues: "every 20 minutes",
           }}
           axisLeft={{
             orient: "left",
@@ -237,7 +247,7 @@ function WaveLengthGraphData(props) {
             tickSize: 7,
             tickPadding: 5,
             tickRotation: 0,
-            legend: isDashboard ? undefined : "Value", // added
+            legend:"Value", // added
             legendOffset: -40,
             legendPosition: "middle",
           }}

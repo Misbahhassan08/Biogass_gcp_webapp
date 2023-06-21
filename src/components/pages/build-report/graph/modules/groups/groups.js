@@ -5,6 +5,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { TextField } from "@mui/material";
 import { baseApiUrl } from "../../../../../../config";
 import dayjs from "dayjs";
 import {
@@ -23,12 +24,8 @@ function Groups(props) {
 
   const [favList, setFavList] = useState([]);
 
-  // const get_list_of_groups = baseApiUrl + "/api/get_list_of_group";
-  // const get_list_of_fav_setting = baseApiUrl + "/api/get_list_of_fav_settings";
-  const get_list_of_groups =
-    "https://bc0f-182-185-136-133.ngrok-free.app/api/get_list_of_group";
-  const get_list_of_fav_setting =
-    "https://bc0f-182-185-136-133.ngrok-free.app/api/get_list_of_fav_settings";
+  const get_list_of_groups = baseApiUrl + "/api/get_list_of_group";
+  const get_list_of_fav_setting = baseApiUrl + "/api/get_list_of_fav_settings";
 
   const handleGroupIDChange = (event) => {
     const selectedGroupId = event.target.value;
@@ -50,15 +47,13 @@ function Groups(props) {
     const selectedGroupName = event.target.value;
     setGroupName(selectedGroupName);
 
-    // Find the corresponding group ID
-    const selectedGroup = groupData[0].find(
-      (group) => group.GroupName === selectedGroupName
-    );
-    if (selectedGroup) {
-      const selectedGroupId = selectedGroup.GroupID;
-      setGroupId(selectedGroupId);
-      getFavList(selectedGroupId, selectedGroupName);
-    }
+   // Find the corresponding group ID
+  const selectedGroup = groupData[0].find((group) => group.GroupName === selectedGroupName);
+  if (selectedGroup) {
+    const selectedGroupId = selectedGroup.GroupID;
+    setGroupId(selectedGroupId);
+    getFavList(selectedGroupId, selectedGroupName);
+  }
   };
 
   const handleFavListChange = (event) => {
@@ -72,7 +67,7 @@ function Groups(props) {
       setFavListSettingObj(v);
       localStorage.setItem("UserFavSettingObj", JSON.stringify(v));
       console.log(v, "setting object");
-      // renderGraph(v);
+      props.setFavSetting()
     }
     // console.log(selectedFavList, "this is fav list");
   };
@@ -113,7 +108,7 @@ function Groups(props) {
 
   return (
     <Row className="gap-4 mb-5 align-self-center text-center">
-      <Col style={{ backgroundColor: "#2484ac" }} className="">
+      <Row style={{ backgroundColor: "#2484ac" }} className="">
         <FormControl
           sx={{ m: 1, width: "95%" }}
           size="small"
@@ -142,9 +137,15 @@ function Groups(props) {
               ))}
           </Select>
         </FormControl>
-      </Col>
+      </Row>
 
-      <Col style={{ backgroundColor: "#2484ac" }}>
+      <Row
+        style={{
+          backgroundColor: "#2484ac",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
         <FormControl
           sx={{ m: 1, width: "95%" }}
           size="small"
@@ -173,8 +174,9 @@ function Groups(props) {
               ))}
           </Select>
         </FormControl>
-      </Col>
-      <Col style={{ backgroundColor: "#2484ac" }}>
+        
+      </Row>
+      <Row style={{ backgroundColor: "#2484ac" }}>
         <FormControl
           sx={{ m: 1, width: "95%" }}
           size="small"
@@ -205,12 +207,12 @@ function Groups(props) {
             ))}
           </Select>
         </FormControl>
-      </Col>
+      </Row>
 
-      <Col className="align-self-center">
+      <Row className="align-self-center">
         <Button
           type="submit"
-          className=" menu-btn menu-btn2"
+          className=" menu-btn menu-btn1"
           onClick={() => {
             setOpenGroupNameDialog(true);
           }}
@@ -223,7 +225,7 @@ function Groups(props) {
             setOpenGroupNameDialog(false);
           }}
         />
-      </Col>
+      </Row>
     </Row>
   );
 }

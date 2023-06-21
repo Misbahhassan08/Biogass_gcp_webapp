@@ -34,7 +34,7 @@ function BuildReport() {
           <Col className="px-4">
             <Card className=" p-0 border-0 ">
               <Card.Body className="text-center p-0">
-                <Link to={process.env.PUBLIC_URL + "/build-report/graph"}>
+                <Link to={process.env.PUBLIC_URL + "/build-report/csv-info"}>
                   <img
                     src={GraphImgae}
                     alt="Data_Graph"
@@ -43,7 +43,7 @@ function BuildReport() {
                 </Link>
               </Card.Body>
             </Card>
-            <Link to={process.env.PUBLIC_URL + "/build-report/graph"}>
+            <Link to={process.env.PUBLIC_URL + "/build-report/csv-info"}>
               <Card.Title className="text-center justify-content-center mt-3 mb-5 text-dark text-uppercase">
                 Data Graph
               </Card.Title>

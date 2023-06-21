@@ -56,6 +56,7 @@ import BuildReportGrid from "./components/pages/build-report/grid/reports";
 import SampleDetails from "./components/pages/report-details";
 import SampleConcentrationDetails from "./components/pages/report-details/startDetails/sampleConcentrationDetails";
 import EndResultDetails from "./components/pages/report-details/endResults/endResult";
+import CsvInfoPage from "./components/pages/build-report/graph/csvPage";
 
 function App() {
   useEffect(() => {
@@ -110,7 +111,7 @@ function App() {
               <Route
                 exact
                 path={`${process.env.PUBLIC_URL}/rack1/completed`}
-                element={<RackCompleted />}
+                // element={<RackCompleted />}
                 element={<ProtectedRoute element={RackCompleted} />}
               />
               <Route
@@ -148,7 +149,7 @@ function App() {
               />
               <Route
                 path={`${process.env.PUBLIC_URL}/reports/isolatereports-status`}
-                element={<IsolateReportsStatus />}
+                // element={<IsolateReportsStatus />}
                 element={<ProtectedRoute element={ReviewReport} />}
               />
               <Route
@@ -310,6 +311,11 @@ function App() {
                 element={<ProtectedRoute element={BuildReportGraph} />}
               />
 
+              <Route
+                path={`${process.env.PUBLIC_URL}/build-report/csv-info`}
+                // element={<EndResultDetails />}
+                element={<ProtectedRoute element={CsvInfoPage} />}
+              />
               <Route
                 path={`${process.env.PUBLIC_URL}/sample-details`}
                 // element={<SampleDetails />}

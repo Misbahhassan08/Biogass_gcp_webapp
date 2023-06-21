@@ -73,6 +73,10 @@ function Login() {
                     <Button
                       type="submit"
                       className="mt-2 d-flex justify-content-center cancel-btn"
+                      onClick={()=>{
+                        setUserName("")
+                        setPassword("")
+                      }}
                     >
                       Cancel
                     </Button>

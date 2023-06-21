@@ -23,6 +23,7 @@ function DataTypeSelect(props) {
       const data = localStorage.getItem("UserFavSettingObj");
       const parsedObj = JSON.parse(data);
       const requiredDataType = parsedObj.Data;
+      setisNrm(false)
       // console.log(requiredDataType, "parsed object");
 
       if (requiredDataType.Raw) {

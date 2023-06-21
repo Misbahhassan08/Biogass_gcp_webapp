@@ -22,13 +22,18 @@ function BuildReportGrid() {
     setRowsData(tableData.result);
   }
 
-  useEffect(async () => {
+  useEffect(() => {
     //mqtt.requestData('biogas/client/request/database/csvtbl/data', JSON.stringify({data:"misbah"}))
     document.title = "Build Report";
+    getCsvData()
+    
+  }, []);
+
+  const getCsvData = async () =>{
     const csvList = await fetchGetReq(get_csv_list_endpoint);
     console.log(csvList.result, "this is csv lsit");
     setCsvRowsData(csvList.result);
-  }, []);
+  }
 
   return (
     <>

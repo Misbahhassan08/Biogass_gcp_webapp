@@ -8,16 +8,16 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
 export default function CustomFavNameDialog(props) {
-    const [openDialog, setOpenDialog] = useState(true)
+  const [openDialog, setOpenDialog] = useState(true);
   const [settingName, setSettingName] = useState("");
 
   function handleSettingName(event) {
     setSettingName(event.target.value);
   }
 
-  function handleSubmit(){
+  function handleSubmit() {
     setOpenDialog(false);
-    props.getCustomSettingName(settingName)
+    props.getCustomSettingName(settingName);
   }
 
   return (
@@ -46,10 +46,13 @@ export default function CustomFavNameDialog(props) {
         </DialogContent>
         <DialogActions>
           <Button
-            onClick={handleSubmit}
+            onClick={() => {
+              setOpenDialog(false);
+            }}
           >
-            Submit
+            Cancel
           </Button>
+          <Button onClick={handleSubmit}>Submit</Button>
         </DialogActions>
       </Dialog>
     </div>
